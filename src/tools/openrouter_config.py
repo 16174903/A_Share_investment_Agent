@@ -1,7 +1,7 @@
 import os
 import time
 import logging
-from google import genai
+import google.genai as genai
 from dotenv import load_dotenv
 from dataclasses import dataclass
 import backoff
@@ -82,6 +82,7 @@ else:
     logger.warning(f"{ERROR_ICON} 未找到环境变量文件: {env_path}")
 
 # 验证环境变量
+# api_key=r'AIzaSyCj8Beo4pu-DUFHKPFoSJKE3bjY2AP_9yE'
 api_key = os.getenv("GEMINI_API_KEY")
 model = os.getenv("GEMINI_MODEL")
 
@@ -93,7 +94,9 @@ if not model:
     logger.info(f"{WAIT_ICON} 使用默认模型: {model}")
 
 # 初始化 Gemini 客户端
+# genai.configure(api_key=api_key)
 client = genai.Client(api_key=api_key)
+# client = genai.configure(api_key=api_key)
 logger.info(f"{SUCCESS_ICON} Gemini 客户端初始化成功")
 
 
@@ -117,6 +120,12 @@ def generate_content_with_retry(model, contents, config=None):
             contents=contents,
             config=config
         )
+        # model = genai.GenerativeModel('gemini-1.5-flash')
+        # response = model.generate_content(
+        #     model=model,
+        #     contents=contents,
+        #     config=config
+        # )
 
         logger.info(f"{SUCCESS_ICON} API 调用成功")
         logger.info(f"响应内容: {response.text[:500]}..." if len(

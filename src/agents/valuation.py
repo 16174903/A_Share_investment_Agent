@@ -1,8 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from langchain_core.messages import HumanMessage
 from src.agents.state import AgentState, show_agent_reasoning
 import json
 
-
+growth_rate = 0.05
 def valuation_agent(state: AgentState):
     """Performs detailed valuation analysis using multiple methodologies."""
     show_reasoning = state["metadata"]["show_reasoning"]
@@ -25,7 +28,8 @@ def valuation_agent(state: AgentState):
             'depreciation_and_amortization'),
         capex=current_financial_line_item.get('capital_expenditure'),
         working_capital_change=working_capital_change,
-        growth_rate=metrics["earnings_growth"],
+        # growth_rate=metrics["earnings_growth"],
+        growth_rate=growth_rate,
         required_return=0.15,
         margin_of_safety=0.25
     )
@@ -33,12 +37,14 @@ def valuation_agent(state: AgentState):
     # DCF Valuation
     dcf_value = calculate_intrinsic_value(
         free_cash_flow=current_financial_line_item.get('free_cash_flow'),
-        growth_rate=metrics["earnings_growth"],
+        # growth_rate=metrics["earnings_growth"],
+        growth_rate=growth_rate,
         discount_rate=0.10,
         terminal_growth_rate=0.03,
         num_years=5,
     )
-
+    if not market_cap:
+        market_cap+=0.01
     # Calculate combined valuation gap (average of both methods)
     dcf_gap = (dcf_value - market_cap) / market_cap
     owner_earnings_gap = (owner_earnings_value - market_cap) / market_cap

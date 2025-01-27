@@ -1,0 +1,13 @@
+numpy
+pandas
+matplotlib
+langchain_core
+scikit-learn
+typing-extensions
+beautifulsoup4
+requests
+tqdm
+google-generativeai
+python-dotenv
+backoff
+langgraph

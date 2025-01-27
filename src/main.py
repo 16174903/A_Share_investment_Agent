@@ -1,3 +1,9 @@
+import sys
+import os
+
+# 将项目根目录添加到 sys.path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from datetime import datetime, timedelta
 import argparse
 from src.agents.valuation import valuation_agent
